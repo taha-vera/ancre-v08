@@ -1,0 +1,69 @@
+\section{Differential Privacy Specification}
+
+\subsection{Mechanism}
+Let $D = (x_1,\ldots,x_n) \in [0,1]^n$.
+The ANCRE mechanism is:
+\[
+\mathcal{M}(D) =
+\lfloor \hat{\mu}(D) \cdot S \rceil + \eta
+\]
+where $\hat{\mu}$ is TMoM ($K=10$, $\alpha=0.1$),
+$S=10^6$ (scaling), and
+$\eta \sim \operatorname{DLap}(\Delta_1^S/\varepsilon)$.
+
+\textbf{Sensitivity.}
+$\Delta_1(\hat{\mu}) \leq 2/n_{\mathrm{eff}}$
+where $n_{\mathrm{eff}} = \lfloor n/K \rfloor (K-2t)$.
+
+\textbf{Privacy budget.}
+Single query per 30-second window.
+No composition across windows in this version.
+$\varepsilon=0.5$, $\delta=0$, per window.
+
+\textbf{Randomness.}
+Noise injected via \texttt{secrets.randbelow}
+(CSPRNG) in Python prototype;
+\texttt{ChaCha20} in Rust production.
+
+\subsection{Threat Model}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+Adversary & Capability & ANCRE defense \\
+\midrule
+Passive observer & Output only & $\varepsilon=0.5$-DP \\
+Input controller & Inject signals & H1: max\_per\_device=1 \\
+Timing observer & Measure latency & Out of scope v0.8 \\
+Memory observer & Read RAM & H6: honest-but-curious \\
+\bottomrule
+\end{tabular}
+\caption{Threat model summary.}
+\end{table}
+
+\subsection{Reproducibility}
+
+\textbf{Benchmark conditions.}
+Measurements on Android/Termux (ARM),
+dataset preloaded in RAM (warm-cache),
+\texttt{random.seed(42)} for Python prototype.
+
+\textbf{Deterministic input generator.}
+\begin{verbatim}
+random.seed(42)
+signals = [random.uniform(0.3, 1.0)
+           for _ in range(n)]
+\end{verbatim}
+
+\textbf{Rust benchmark.}
+\begin{verbatim}
+cargo test --release
+# Expected: 59/59 pass
+\end{verbatim}
+
+\textbf{Python benchmark.}
+\begin{verbatim}
+python3 benchmarks/petseval.py \
+  --runs 100 --epsilon 0.5
+\end{verbatim}
