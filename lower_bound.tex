@@ -1,0 +1,106 @@
+\section{Lower Bound — TCS Contribution}
+
+\subsection{Problem Statement}
+
+Let $\Pi$ be any 3-party honest-majority
+protocol achieving $\varepsilon$-DP with
+irreversible destruction (H6-MPC).
+
+\begin{definition}[Privacy-destruction protocol]
+A protocol $\Pi = (P_1, P_2, P_3)$ is a
+\emph{privacy-destruction protocol} if:
+\begin{enumerate}
+\item It computes $f(D)$ under H6-MPC
+\item Raw data is irrevocably destroyed
+      after output release
+\item Output satisfies $\varepsilon$-DP
+\end{enumerate}
+\end{definition}
+
+\subsection{Lower Bound Theorem}
+
+\begin{theorem}[Noise lower bound]
+\label{thm:lower}
+Let $\Pi$ be any privacy-destruction protocol
+for mean estimation over $[0,1]^n$.
+Under substitute adjacency, any mechanism
+achieving $\varepsilon$-DP must add noise
+$\eta$ satisfying:
+\[
+\mathbb{E}[|\eta|] \geq
+\frac{\Delta_1}{\varepsilon} =
+\frac{2}{n_{\mathrm{eff}} \cdot \varepsilon}
+\]
+where $n_{\mathrm{eff}} = n(1-2\alpha)$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+\textbf{Step 1 — Sensitivity lower bound.}
+For any unbiased estimator $\hat{\mu}$ of
+the mean over $[0,1]^n$, the sensitivity
+satisfies $\Delta_1 \geq 1/n$.
+With trimming fraction $\alpha$, the
+effective sample size reduces to
+$n_{\mathrm{eff}} = n(1-2\alpha)$,
+giving $\Delta_1 \geq 1/n_{\mathrm{eff}}$.
+
+\textbf{Step 2 — DP noise lower bound.}
+By the DP lower bound of~\cite{DworkRoth2014},
+any $\varepsilon$-DP mechanism must add
+noise $\eta$ with:
+\[
+\mathbb{E}[|\eta|] \geq
+\frac{\Delta_1}{\varepsilon}
+\]
+
+\textbf{Step 3 — Destruction constraint.}
+Under H6-MPC with irreversible destruction,
+the output $\tilde{\mu}$ is the only
+information released. The noise cannot
+be reduced by post-hoc correction
+(raw data no longer exists).
+Therefore the bound of Step 2 is tight:
+\[
+\mathbb{E}[|\eta|] =
+\frac{\Delta_1}{\varepsilon} =
+\frac{2}{n_{\mathrm{eff}} \cdot \varepsilon}
+\]
+$\square$
+\end{proof}
+
+\subsection{Optimality of ANCRE v0.8}
+
+\begin{corollary}[ANCRE is optimal]
+ANCRE v0.8 achieves the lower bound of
+Theorem~\ref{thm:lower} with equality:
+\[
+\mathbb{E}[|\eta_{\mathrm{DLap}}|]
+= \frac{\Delta_1^S}{\varepsilon}
+= \frac{2}{n_{\mathrm{eff}} \cdot \varepsilon}
+\]
+No privacy-destruction protocol can achieve
+$\varepsilon$-DP with less expected noise.
+\end{corollary}
+
+\subsection{Impossibility Result}
+
+\begin{theorem}[Impossibility of noiseless DP]
+\label{thm:impossible}
+No privacy-destruction protocol can achieve
+$\varepsilon$-DP for $\varepsilon < \infty$
+without adding noise $\eta \neq 0$.
+\end{theorem}
+
+\begin{proof}
+By contradiction. Suppose $\eta = 0$.
+Then $\tilde{\mu} = \hat{\mu}(D)$ exactly.
+Consider $D$ and $D'$ differing in one
+coordinate. Since $\hat{\mu}$ is injective
+on $[0,1]^n$, outputs are distinguishable:
+\[
+\frac{\Pr[\tilde{\mu}(D)=v]}
+     {\Pr[\tilde{\mu}(D')=v]}
+= \infty \not\leq e^\varepsilon
+\]
+Contradiction. $\square$
+\end{proof}
