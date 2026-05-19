@@ -92,3 +92,26 @@ resistance using shadow model training
 Both AUC values are well below the
 $\varepsilon$-DP theoretical bound.
 \textbf{Result: PASS.}
+
+\subsection{Cross-System Comparison}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lllll}
+\toprule
+System & Trust model & DP & MPC & Destruction \\
+\midrule
+Bonawitz et al.~\cite{Bonawitz2017}
+  & Single server & No  & Yes & No  \\
+DP-SGD~\cite{Abadi2016}
+  & Single server & Yes & No  & No  \\
+Central DP
+  & Single server & Yes & No  & No  \\
+\textbf{ANCRE v0.8}
+  & H6-MPC (2/3) & Yes & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\caption{Cross-system comparison.
+ANCRE v0.8 is the only system combining
+MPC, DP, and irreversible destruction.}
+\end{table}
