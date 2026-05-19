@@ -1,0 +1,48 @@
+\begin{table}[h]
+\centering
+\caption{Figure 3: End-to-end ANCRE pipeline
+performance under single-pass streaming conditions.}
+
+\textbf{Measured results:}
+\begin{tabular}{lrrl}
+\toprule
+$n$ & Runtime (s) & Peak RAM & Notes \\
+\midrule
+$1\times10^2$ & 0.002 & $<0.1$ MB & Python prototype \\
+$1\times10^3$ & 0.018 & 0.1 MB    & Python prototype \\
+$1\times10^4$ & 0.184 & 1.4 MB    & Python prototype \\
+$1\times10^5$ & 1.919 & 12.6 MB   & Python prototype \\
+$5\times10^5$ & 9.854 & 59.4 MB   & Python prototype \\
+$1\times10^6$ & 0.60  & $<60$ MB  & Rust implementation \\
+$3\times10^6$ & 1.80  & $<60$ MB  & Rust implementation \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\textbf{Model-based extrapolation:}
+\begin{tabular}{lll}
+\toprule
+Configuration & Estimated Runtime & Assumptions \\
+\midrule
+Python @ $3\times10^6$ & $\sim$60s & Linear $O(n)$ projection \\
+Rust steady-state & 0.3–1.8s & Warm-cache conditions \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\textbf{Output semantics:}
+Single-pass aggregation, constant-size scalar
+release (f64), $\varepsilon=0.5$-DP budget,
+raw samples destroyed after aggregation,
+bounded memory footprint observed experimentally.
+\end{table}
+
+\begin{quote}
+\textit{The Python implementation is used as a
+reference prototype and exhibits linear scaling
+dominated by runtime overhead. The Rust
+implementation achieves sub-second to low-second
+processing for multi-million-sample workloads
+under warm-cache conditions while maintaining
+bounded memory usage and constant-size DP output.}
+\end{quote}
