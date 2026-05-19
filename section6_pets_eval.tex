@@ -67,6 +67,15 @@ cold-start streaming benchmarks are left for future work.
 Warm-cache batch only, not cold-start streaming.
 Adversarial benchmark left for future work.
 
+\textbf{Methodological note.}
+Preliminary local measurements were obtained
+under warm-cache single-process conditions on
+an Android ARM device running Python.
+These experiments evaluate the aggregation
+kernel itself rather than a full distributed
+deployment, and therefore exclude network,
+serialization, and orchestration overheads.
+
 \subsection{Comparison}
 \begin{table}[h]
 \centering
@@ -80,6 +89,14 @@ DP-SGD & $\times$ & \checkmark & $\times$ & \checkmark \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\textbf{Methodological note.}
+Preliminary local measurements were obtained
+under warm-cache single-process conditions on
+an Android ARM device running Python.
+These experiments evaluate the aggregation
+kernel itself, excluding network,
+serialization, and orchestration overheads.
 
 \subsection{Limitations}
 Semi-honest model only.
