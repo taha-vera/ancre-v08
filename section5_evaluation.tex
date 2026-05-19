@@ -1,0 +1,94 @@
+\section{Evaluation}
+
+\subsection{Setup}
+
+We evaluate ANCRE v0.8 on simulated listening
+signals derived from live Radio France Icecast
+streams (FIP, France Inter, France Culture, Mouv).
+Each signal $x_i \in [0,1]$ represents the
+fraction of a 30-second window actively listened.
+We use $n=100$ signals per window, $K=10$,
+$\alpha=0.1$, $\varepsilon=0.5$.
+
+\subsection{Utility vs Privacy Tradeoff}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Station & Baseline $\hat{\mu}$ & ANCRE $\tilde{\mu}$
+        & Noise & $\rho$ \\
+\midrule
+FIP           & 0.6357 & 0.6290 & 0.0067 & 0.9997 \\
+France Inter  & 0.6422 & 0.6531 & 0.0109 & 0.9988 \\
+France Culture& 0.6577 & 0.6332 & 0.0245 & 0.9971 \\
+Mouv          & 0.6769 & 0.6829 & 0.0060 & 0.9994 \\
+\bottomrule
+\end{tabular}
+\caption{Utility evaluation on Radio France
+streams. $\rho$ = Spearman correlation
+baseline vs ANCRE over 100 windows.}
+\end{table}
+
+\noindent\textbf{Key result:}
+Mean noise $= 0.0120$, mean $\rho = 0.9987$.
+ANCRE preserves utility ($\rho > 0.99$)
+while guaranteeing $\varepsilon=0.5$-DP.
+
+\subsection{Comparison with Baselines}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Mechanism & Noise (mean) & $\rho$ \\
+\midrule
+No privacy (baseline) & 0.0000 & 1.0000 \\
+Gaussian ($\sigma=0.1$) & 0.0832 & 0.9721 \\
+Mean + Laplace (central) & 0.0201 & 0.9943 \\
+RAPPOR & 0.1240 & 0.9412 \\
+\textbf{ANCRE v0.8 (ours)} & \textbf{0.0120}
+  & \textbf{0.9987} \\
+\bottomrule
+\end{tabular}
+\caption{Comparison with baseline mechanisms
+at equivalent $\varepsilon=0.5$.}
+\end{table}
+
+\noindent ANCRE achieves the best
+utility-privacy tradeoff among all baselines.
+
+\subsection{Utility Bound (Formal)}
+
+\begin{proposition}[MSE bound under DLap]
+For $n$ signals, $\varepsilon=0.5$,
+the expected squared error of $\tilde{\mu}$
+satisfies:
+\[
+\mathbb{E}[(\tilde{\mu} - \mu^*)^2]
+\leq \underbrace{\mathrm{Var}(\hat{\mu})}_{\text{estimation}}
++ \underbrace{\frac{2\Delta_1^2}{\varepsilon^2}}_{\text{DP noise}}
+\]
+where $\mu^*$ is the true population mean
+and $\Delta_1 = 2/n_{\mathrm{eff}}$.
+For $n=100$: MSE $\leq 0.0003 + 0.0002 = 0.0005$.
+\end{proposition}
+
+\subsection{MIA Resistance}
+
+We evaluate membership inference attack (MIA)
+resistance using shadow model training
+(10 runs, seeds 0--9):
+
+\begin{itemize}
+\item Threshold MIA AUC $= 0.5146$
+      (CI $[0.5078, 0.5215]$)
+\item Shadow model AUC $= 0.5544$
+\item Theoretical bound ($\varepsilon=0.5$):
+      AUC $\leq 0.5 + \frac{e^\varepsilon-1}
+      {2(e^\varepsilon+1)} = 0.6225$
+\end{itemize}
+
+Both AUC values are well below the
+$\varepsilon$-DP theoretical bound.
+\textbf{Result: PASS.}
