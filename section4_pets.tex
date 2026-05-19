@@ -1,0 +1,62 @@
+\section{Privacy and Security Analysis}
+
+\noindent\textbf{Setup.}
+$D=(x_1,\ldots,x_n)\in[0,1]^n$,
+semi-honest static corruption,
+at most 1 party among $\{P_1,P_2,P_3\}$.
+
+\subsection{Differential Privacy Guarantee}
+
+\begin{theorem}[$\varepsilon$-DP of ANCRE]
+The mechanism $\mathcal{M}(D) =
+\lfloor\hat{\mu}(D)\cdot S\rceil + \eta$,
+$\eta\sim\operatorname{DLap}(\Delta_1^S/\varepsilon)$,
+$\varepsilon=0.5$, $\delta=0$,
+satisfies $\varepsilon$-differential privacy
+under substitute adjacency.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+TMoM sensitivity:
+$\Delta_1 \leq 2/n_{\mathrm{eff}}$.
+Standard discrete Laplace mechanism
+analysis~\cite{DworkRoth2014} gives
+$\varepsilon$-DP. By post-processing
+invariance, MPC output preserves DP.
+\end{proof}
+
+\subsection{MPC Security}
+
+Under H6-MPC (semi-honest, static,
+$\leq 1$ corrupted party):
+
+\begin{itemize}
+\item \textbf{$P_1$ corrupted:}
+IND-CPA encryption prevents signal recovery.
+\item \textbf{$P_2$ corrupted:}
+Enclave zeroization — only $\tilde{\mu}$ exits.
+\item \textbf{$P_3$ corrupted:}
+One Shamir share insufficient for reconstruction.
+\end{itemize}
+
+A single corrupted party achieves at most
+Denial of Service, not privacy violation.
+
+\subsection{Threat Model Limitations}
+
+We explicitly acknowledge the following
+limitations of the current model:
+
+\begin{itemize}
+\item \textbf{Semi-honest only:}
+Full malicious security (UC framework)
+is left for future work.
+\item \textbf{Static corruption:}
+Adaptive adversaries are not modeled.
+\item \textbf{Composition:}
+Privacy budget under continuous streaming
+requires RDP analysis (future work).
+\item \textbf{Secure erasure:}
+We assume application-level destruction;
+hardware-backed erasure is not formalized.
+\end{itemize}
