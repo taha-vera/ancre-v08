@@ -1,0 +1,53 @@
+version: '3.8'
+
+networks:
+  ancre-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  p1-collector:
+    build: .
+    container_name: ancre-p1
+    networks:
+      ancre-net:
+        ipv4_address: 172.20.0.10
+    environment:
+      - ROLE=P1
+      - P2_HOST=172.20.0.11
+      - P3_HOST=172.20.0.12
+      - N_SIGNALS=100000
+      - EPSILON=0.5
+    command: python3 benchmarks/p1_collector.py
+    volumes:
+      - ./metrics:/app/metrics
+
+  p2-aggregator:
+    build: .
+    container_name: ancre-p2
+    networks:
+      ancre-net:
+        ipv4_address: 172.20.0.11
+    environment:
+      - ROLE=P2
+      - P3_HOST=172.20.0.12
+      - EPSILON=0.5
+    command: python3 benchmarks/p2_aggregator.py
+    volumes:
+      - ./metrics:/app/metrics
+    depends_on:
+      - p3-trust
+
+  p3-trust:
+    build: .
+    container_name: ancre-p3
+    networks:
+      ancre-net:
+        ipv4_address: 172.20.0.12
+    environment:
+      - ROLE=P3
+    command: python3 benchmarks/p3_trust.py
+    volumes:
+      - ./metrics:/app/metrics
