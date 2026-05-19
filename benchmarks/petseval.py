@@ -1,5 +1,5 @@
 import argparse, random, math, secrets, json, os
-from datetime import datetime
+from datetime import datetime, timezone
 
 def geo(p):
     u = secrets.randbelow(2**53)/(2**53)
@@ -42,7 +42,7 @@ def main():
 
     latencies.sort()
     metrics = {
-        "date": datetime.now(datetime.timezone.utc).isoformat(),
+        "date": datetime.now(timezone.utc).isoformat(),
         "n": args.n,
         "runs": args.runs,
         "epsilon": args.epsilon,
@@ -55,7 +55,7 @@ def main():
     print(f"p50={metrics['p50_ms']}ms p95={metrics['p95_ms']}ms p99={metrics['p99_ms']}ms")
     print(f"mean={metrics['mean_ms']}ms stdev={metrics['stdev_ms']}ms")
     os.makedirs("metrics", exist_ok=True)
-    fname = f"metrics/ci_{datetime.now(datetime.timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
+    fname = f"metrics/ci_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
     with open(fname, "w") as f:
         json.dump(metrics, f, indent=2)
     print(f"Saved: {fname}")
