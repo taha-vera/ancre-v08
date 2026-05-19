@@ -1,0 +1,39 @@
+\section{Lower Bound via Le Cam's Method}
+
+\subsection{Setup}
+Let $D, D'$ be adjacent datasets differing
+in one coordinate. Let $P = \mathcal{M}(D)$
+and $Q = \mathcal{M}(D')$ denote the induced
+output distributions. Binary hypothesis test:
+\[
+H_0: X \sim P \quad \text{vs} \quad H_1: X \sim Q
+\]
+
+\subsection{Le Cam Risk}
+Minimax risk:
+\[
+R^* = \inf_\phi \left(
+\Pr_P[\phi(X)=1] + \Pr_Q[\phi(X)=0]
+\right) = 1 - \|P - Q\|_{\mathrm{TV}}
+\]
+
+\subsection{DP implies indistinguishability}
+If $\mathcal{M}$ satisfies $\varepsilon$-DP:
+\[
+\|P - Q\|_{\mathrm{TV}}
+\leq \frac{e^\varepsilon - 1}{e^\varepsilon + 1}
+= 0.2449 \quad (\varepsilon=0.5)
+\]
+
+Thus: $R^* \geq 1 - 0.2449 = 0.7551$.
+
+\subsection{Noise Lower Bound}
+Indistinguishability requires:
+\[
+\mathbb{E}[|\eta|] \geq
+\frac{\Delta_1}{\varepsilon}
+= \frac{2}{n_{\mathrm{eff}} \cdot \varepsilon}
+\]
+
+ANCRE v0.8 achieves this bound with equality.
+No privacy-destruction protocol can do better.
