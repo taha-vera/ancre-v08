@@ -1,0 +1,66 @@
+\section{TV Bound from $\varepsilon$-DP (Formal)}
+
+\begin{lemma}[TV distance under $\varepsilon$-DP]
+\label{lem:tv}
+Let $\mathcal{M}$ satisfy $\varepsilon$-DP.
+Then for any adjacent $D, D'$:
+\[
+\|P - Q\|_{\mathrm{TV}}
+\leq \frac{e^\varepsilon - 1}{e^\varepsilon + 1}
+\]
+where $P = \mathcal{M}(D)$, $Q = \mathcal{M}(D')$.
+\end{lemma}
+
+\begin{proof}
+By $\varepsilon$-DP, for all measurable $S$:
+\[
+P(S) \leq e^\varepsilon Q(S)
+\quad \text{and} \quad
+Q(S) \leq e^\varepsilon P(S)
+\]
+
+Let $S^+ = \{x : P(x) > Q(x)\}$.
+Then:
+\[
+\|P - Q\|_{\mathrm{TV}}
+= P(S^+) - Q(S^+)
+\]
+
+From $P(S^+) \leq e^\varepsilon Q(S^+)$
+and $P(S^+) + Q(S^+) \leq 1$
+(since $P(S^+) \leq 1 - Q((S^+)^c)$):
+
+Let $p = P(S^+)$, $q = Q(S^+)$.
+We have $p \leq e^\varepsilon q$
+and $q \leq e^\varepsilon p$.
+
+Maximize $p - q$ subject to:
+\begin{align}
+p &\leq e^\varepsilon q \\
+q &\leq e^\varepsilon p \\
+p + (1-p) &= 1, \quad q + (1-q) = 1
+\end{align}
+
+At optimum: $p = \frac{e^\varepsilon}{1+e^\varepsilon}$,
+$q = \frac{1}{1+e^\varepsilon}$.
+
+Therefore:
+\[
+\|P - Q\|_{\mathrm{TV}}
+= p - q
+= \frac{e^\varepsilon - 1}{e^\varepsilon + 1}
+\quad \square
+\]
+\end{proof}
+
+\begin{corollary}[Tight TV for $\varepsilon=0.5$]
+For $\varepsilon = 0.5$:
+\[
+\|P - Q\|_{\mathrm{TV}}
+\leq \frac{e^{0.5}-1}{e^{0.5}+1}
+= \frac{\sqrt{e}-1}{\sqrt{e}+1}
+\approx 0.2449
+\]
+This bound is achieved by
+$\operatorname{DLap}(\Delta_1/\varepsilon)$.
+\end{corollary}
