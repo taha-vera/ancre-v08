@@ -1,0 +1,123 @@
+\documentclass[10pt,conference]{IEEEtran}
+
+% Preamble
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\DeclareMathOperator{\DLap}{DLap}
+\DeclareMathOperator{\MerkleRoot}{MerkleRoot}
+\DeclareMathOperator{\Enc}{Enc}
+\DeclareMathOperator{\Sign}{Sign}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{remark}{Remark}
+\newtheorem{proposition}{Proposition}
+
+\title{ANCRE v0.8: Privacy Guarantees Built\\
+on Irreversible Destruction}
+
+\author{Taha Houari\\
+Independent Researcher, Paris, France\\
+tahahouari@hotmail.fr\\
+Preprint: HAL, May 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Most privacy systems build guarantees on what
+they protect. ANCRE builds its guarantees on
+what it irrevocably destroys. We present ANCRE
+v0.8, a 3-party MPC protocol achieving
+$\varepsilon=0.5$-DP for B2B audio analytics
+under honest-majority assumption H6-MPC,
+without trust in any single operator.
+We prove that ANCRE is \emph{optimal}:
+no privacy-destruction protocol can achieve
+$\varepsilon$-DP with less noise under
+substitute adjacency. The lower bound follows
+from Le Cam's method applied to the
+indistinguishability requirement.
+\end{abstract}
+
+% Section 1
+\section{Introduction}
+Radio platforms generate granular listening
+signals carrying significant commercial value
+for AI operators. Existing solutions require
+trusting a single aggregation server.
+
+ANCRE v0.7~\cite{houari2026ancre} addressed
+this with central DP under honest-but-curious
+H6. ANCRE v0.8 replaces H6 with H6-MPC:
+breaking privacy requires collusion of
+at least 2 of 3 independent parties.
+
+\textbf{Contributions:}
+\begin{itemize}
+\item 3-party MPC protocol with threshold
+      encryption and Merkle-anchored window closure
+\item Formal H6-MPC replacing operational H6
+\item $\varepsilon=0.5$-DP without single-server trust
+\item \textbf{Optimality proof via Le Cam's method}
+\item Publicly verifiable MPC attestation
+\end{itemize}
+
+% Section 2
+\section{Parties and Roles}
+\begin{itemize}
+\item $P_1$: Collector (Radio France) ---
+      receives encrypted signals, destroys raw data
+\item $P_2$: DP Aggregator (VERA) ---
+      holds decryption share, runs TMoM+DLap
+\item $P_3$: Trusted Third Party (CNIL) ---
+      validates timestamp, holds decryption share
+\end{itemize}
+
+% Section 3 — Protocol
+\input{section3_v2}
+
+% Section 4 — Security
+\input{section4_camera_ready}
+
+% Section 5 — Lower Bound TCS
+\section{Optimality: Lower Bound via Le Cam}
+
+\input{tv_bound_proof}
+\input{lower_bound_lecam}
+\input{lower_bound}
+
+% Section 6 — Evaluation
+\input{section5_evaluation}
+
+% Section 7 — Related Work
+\section{Related Work}
+
+Bonawitz et al.~\cite{Bonawitz2017} propose
+secure aggregation without DP guarantees.
+DP-SGD~\cite{Abadi2016} adds DP to gradient
+descent but assumes a single trusted server.
+ANCRE v0.8 combines MPC, DP, and irreversible
+destruction --- no prior work achieves all three.
+
+% Section 8 — Conclusion
+\section{Conclusion}
+
+ANCRE v0.8 provides the first formally optimal
+privacy-destruction protocol under H6-MPC.
+The optimality result (Le Cam lower bound)
+shows that no mechanism can achieve
+$\varepsilon$-DP with less noise while
+guaranteeing irreversible destruction.
+
+Future work: formal TEE attestation (v0.9),
+zero-knowledge proof of destruction,
+extension to adaptive corruption model.
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+
+\end{document}
