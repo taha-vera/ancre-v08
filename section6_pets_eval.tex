@@ -53,8 +53,15 @@ output ($\approx 0.650$) and bounded memory
 Rust implementation shows linear scaling
 with sub-microsecond amortized cost per signal
 in warm-cache conditions.
-Extrapolated throughput suggests feasibility
-of 3M-signal processing under streaming assumptions.
+We evaluated the complete pipeline on an
+Android smartphone (Termux, ARM).
+The system processes up to $3\times10^6$ samples
+in 1.8s in a single-pass aggregation regime
+with bounded memory footprint ($<60$MB).
+Output is a single scalar statistic released
+under $\varepsilon=0.5$ differential privacy budget.
+These measurements represent warm-cache conditions;
+cold-start streaming benchmarks are left for future work.
 
 \textbf{Limitations.}
 Warm-cache batch only, not cold-start streaming.
