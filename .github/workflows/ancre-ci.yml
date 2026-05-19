@@ -1,0 +1,20 @@
+name: ANCRE CI
+on:
+  push:
+    branches: [main]
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run benchmark
+        run: python3 benchmarks/petseval.py --runs 100 --epsilon 0.5
+      - name: Upload metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: metrics
+          path: metrics/
+          retention-days: 90
